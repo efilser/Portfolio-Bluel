@@ -105,78 +105,78 @@ paths:
         '500':
           description: Unexpected Error
     post:
-     summary: Send a new Work
-     security:
-       - BearerAuth: []
+      summary: Send a new Work
+      security:
+        - BearerAuth: []
 
-     requestBody:
-       required: true
-       content:
-         multipart/form-data:
-           schema:
-             type: object
-             properties:
-               image:
-                 type: string
-                 format: binary
-               title:
-                 type: string
-               category:
-                 type: integer
-                 format: int64
-     responses:
-       '201':
-         description: Created
-         content:
-           application/json:
-             schema:
-               type: object
-               properties:
-                 id:
-                   type: integer
-                   format: int64
-                 title:
-                   type: string
-                 imageUrl:
-                   type: string
-                 categoryId:
-                   type: string
-                 userId:
-                   type: integer
-                   format: int64
-       '500':
-         description: Unexpected Error
-       '401':
-         description: Unauthorized
-       '400':
-         description: Bad Request
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                category:
+                  type: integer
+                  format: int64
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  title:
+                    type: string
+                  imageUrl:
+                    type: string
+                  categoryId:
+                    type: string
+                  userId:
+                    type: integer
+                    format: int64
+        '500':
+          description: Unexpected Error
+        '401':
+          description: Unauthorized
+        '400':
+          description: Bad Request
   /works/{id}:
     delete:
-     summary: Delete a work depending on id
-     security:
-       - BearerAuth: []
-     parameters:
-       - name: id
-         in: path
-         required: true
-         description: id of work to be deleted
-         schema:
-           type: integer
-           format: int64
-           example: 1
-     responses:
-       '200':
-         description: Item Deleted
-       '401':
-         description: Unauthorized
-       '500':
-         description: Unexpected Behaviour
+      summary: Delete a work depending on id
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of work to be deleted
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Item Deleted
+        '401':
+          description: Unauthorized
+        '500':
+          description: Unexpected Behaviour
 
 components:
   securitySchemes:
-   BearerAuth:
-     type: http
-     scheme: bearer
+    BearerAuth:
+      type: http
+      scheme: bearer
 securityDefinitions:
   Bearer:
     type: JWT
