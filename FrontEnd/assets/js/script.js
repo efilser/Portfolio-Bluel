@@ -10,7 +10,7 @@ const hotelsResFilter = document.getElementById("hotelsRes");
 
 // ********** VARIABLES ********** //
 
-
+let works = [];
 
 // ********** FUNCTIONS ********** //
 
@@ -21,18 +21,9 @@ const hotelsResFilter = document.getElementById("hotelsRes");
  */
 async function fetchWorks() {
   const response = await fetch("http://localhost:5678/api/works");
-  const works = await response.json();
-  return works;
-}
+  const data = await response.json();
 
-/**
- * Await the fetched array and add desired elements to the gallery when the page is loaded.
- *
- * 
- */
-async function displayWorks() {
-  const works = await fetchWorks();
-  addWorks(works);
+  works = data;
 }
 
 /**
@@ -42,59 +33,105 @@ async function displayWorks() {
  */
 function addWorks(works) {
   gallery.innerHTML = '';
+
   works.forEach(work => {
     const figure = document.createElement('figure');
     const img = document.createElement('img');
+    const figcaption = document.createElement('figcaption');
+
     img.src = work.imageUrl;
     img.alt = work.title;
-    const figcaption = document.createElement('figcaption');
     figcaption.innerText = work.title;
+
     figure.appendChild(img);
     figure.appendChild(figcaption);
     gallery.appendChild(figure);
   });
 }
 
-// ********** MAIN CODE ********** //
-
-displayWorks();
-
-// Event Listeners
-allFilter.addEventListener('click', async () => {
-  const works = await fetchWorks();
+/**
+ * Removes the 'active' class from objectsFilter, apartmentsFilter and hotelsResFilter, and add it to the allFilter.
+ *
+ *
+ */
+function filterAllWorks() {
   allFilter.classList.add('active');
   objectsFilter.classList.remove('active');
   apartmentsFilter.classList.remove('active');
   hotelsResFilter.classList.remove('active');
-  addWorks(works);
-});
+}
 
-objectsFilter.addEventListener('click', async () => {
-  const works = await fetchWorks();
-  const filteredWorks = works.filter(work => work.categoryId === 1);
+/**
+ * Removes the 'active' class from allFilter, apartmentsFilter and hotelsResFilter, and add it to the objectsFilter.
+ *
+ *
+ */
+function filterObjectsWorks() {
   allFilter.classList.remove('active');
   objectsFilter.classList.add('active');
   apartmentsFilter.classList.remove('active');
   hotelsResFilter.classList.remove('active');
-  addWorks(filteredWorks);
-});
+}
 
-apartmentsFilter.addEventListener('click', async () => {
-  const works = await fetchWorks();
-  const filteredWorks = works.filter(work => work.categoryId === 2);
+/**
+ * Removes the 'active' class from allFilter, objectsFilter and hotelsResFilter, and add it to apartmentsFilter.
+ *
+ *
+ */
+function filterApartmentsWorks() {
   allFilter.classList.remove('active');
   objectsFilter.classList.remove('active');
   apartmentsFilter.classList.add('active');
   hotelsResFilter.classList.remove('active');
-  addWorks(filteredWorks);
-});
+}
 
-hotelsResFilter.addEventListener('click', async () => {
-  const works = await fetchWorks();
-  const filteredWorks = works.filter(work => work.categoryId === 3);
+/**
+ * Removes the 'active' class from allFilter, objectsFilter and apartmentsFilter, and add it to hotelsResFilter.
+ *
+ *
+ */
+function filterHotelsResWorks() {
   allFilter.classList.remove('active');
   objectsFilter.classList.remove('active');
   apartmentsFilter.classList.remove('active');
   hotelsResFilter.classList.add('active');
-  addWorks(filteredWorks);
-});
+}
+
+/**
+ * Asynchronously adds event listeners to filter buttons for works and displays the filtered works.
+ *
+ * @return {Promise}
+ */
+function addListeners() {
+
+  allFilter.addEventListener('click', () => {
+    filterAllWorks();
+    addWorks(works);
+  });
+
+  objectsFilter.addEventListener('click', () => {
+    const filteredWorks = works.filter(work => work.categoryId === 1);
+    filterObjectsWorks();
+    addWorks(filteredWorks);
+  });
+
+  apartmentsFilter.addEventListener('click', () => {
+    const filteredWorks = works.filter(work => work.categoryId === 2);
+    filterApartmentsWorks();
+    addWorks(filteredWorks);
+  });
+
+  hotelsResFilter.addEventListener('click', () => {
+    const filteredWorks = works.filter(work => work.categoryId === 3);
+    filterHotelsResWorks();
+    addWorks(filteredWorks);
+  });
+}
+
+// ********** MAIN CODE ********** //
+
+fetchWorks()
+  .then(data => addWorks(works))
+  .catch(error => console.log(error));
+
+addListeners();
