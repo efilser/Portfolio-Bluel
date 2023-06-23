@@ -227,6 +227,7 @@ input[type="submit"]{
   width: 180px;
   text-align: center;
   border-radius: 60px ;
+  cursor: pointer;
 }
 
 #login p {

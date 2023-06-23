@@ -35,9 +35,9 @@ function addWorks(works) {
   gallery.innerHTML = '';
 
   works.forEach(work => {
-    const figure = document.createElement('figure');
-    const img = document.createElement('img');
-    const figcaption = document.createElement('figcaption');
+    const figure = document.createElement("figure");
+    const img = document.createElement("img");
+    const figcaption = document.createElement("figcaption");
 
     img.src = work.imageUrl;
     img.alt = work.title;
@@ -50,51 +50,51 @@ function addWorks(works) {
 }
 
 /**
- * Removes the 'active' class from objectsFilter, apartmentsFilter and hotelsResFilter, and add it to the allFilter.
+ * Removes the "active" class from objectsFilter, apartmentsFilter and hotelsResFilter, and add it to the allFilter.
  *
  *
  */
 function filterAllWorks() {
-  allFilter.classList.add('active');
-  objectsFilter.classList.remove('active');
-  apartmentsFilter.classList.remove('active');
-  hotelsResFilter.classList.remove('active');
+  allFilter.classList.add("active");
+  objectsFilter.classList.remove("active");
+  apartmentsFilter.classList.remove("active");
+  hotelsResFilter.classList.remove("active");
 }
 
 /**
- * Removes the 'active' class from allFilter, apartmentsFilter and hotelsResFilter, and add it to the objectsFilter.
+ * Removes the "active" class from allFilter, apartmentsFilter and hotelsResFilter, and add it to the objectsFilter.
  *
  *
  */
 function filterObjectsWorks() {
-  allFilter.classList.remove('active');
-  objectsFilter.classList.add('active');
-  apartmentsFilter.classList.remove('active');
-  hotelsResFilter.classList.remove('active');
+  allFilter.classList.remove("active");
+  objectsFilter.classList.add("active");
+  apartmentsFilter.classList.remove("active");
+  hotelsResFilter.classList.remove("active");
 }
 
 /**
- * Removes the 'active' class from allFilter, objectsFilter and hotelsResFilter, and add it to apartmentsFilter.
+ * Removes the "active" class from allFilter, objectsFilter and hotelsResFilter, and add it to apartmentsFilter.
  *
  *
  */
 function filterApartmentsWorks() {
-  allFilter.classList.remove('active');
-  objectsFilter.classList.remove('active');
-  apartmentsFilter.classList.add('active');
-  hotelsResFilter.classList.remove('active');
+  allFilter.classList.remove("active");
+  objectsFilter.classList.remove("active");
+  apartmentsFilter.classList.add("active");
+  hotelsResFilter.classList.remove("active");
 }
 
 /**
- * Removes the 'active' class from allFilter, objectsFilter and apartmentsFilter, and add it to hotelsResFilter.
+ * Removes the "active" class from allFilter, objectsFilter and apartmentsFilter, and add it to hotelsResFilter.
  *
  *
  */
 function filterHotelsResWorks() {
-  allFilter.classList.remove('active');
-  objectsFilter.classList.remove('active');
-  apartmentsFilter.classList.remove('active');
-  hotelsResFilter.classList.add('active');
+  allFilter.classList.remove("active");
+  objectsFilter.classList.remove("active");
+  apartmentsFilter.classList.remove("active");
+  hotelsResFilter.classList.add("active");
 }
 
 /**
@@ -104,24 +104,24 @@ function filterHotelsResWorks() {
  */
 function addListeners() {
 
-  allFilter.addEventListener('click', () => {
+  allFilter.addEventListener("click", () => {
     filterAllWorks();
     addWorks(works);
   });
 
-  objectsFilter.addEventListener('click', () => {
+  objectsFilter.addEventListener("click", () => {
     const filteredWorks = works.filter(work => work.categoryId === 1);
     filterObjectsWorks();
     addWorks(filteredWorks);
   });
 
-  apartmentsFilter.addEventListener('click', () => {
+  apartmentsFilter.addEventListener("click", () => {
     const filteredWorks = works.filter(work => work.categoryId === 2);
     filterApartmentsWorks();
     addWorks(filteredWorks);
   });
 
-  hotelsResFilter.addEventListener('click', () => {
+  hotelsResFilter.addEventListener("click", () => {
     const filteredWorks = works.filter(work => work.categoryId === 3);
     filterHotelsResWorks();
     addWorks(filteredWorks);
