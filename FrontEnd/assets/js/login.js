@@ -2,41 +2,53 @@
 
 // ********** CONSTANTS ********** //
 
-const form = document.querySelector("form");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
+const LOGIN_URL = "http://localhost:5678/api/users/login";
 
-// ********** VARIABLES ********** //
+const emailElt  = document.getElementById("email");
+const passElt   = document.getElementById("password");
+const loginElt  = document.getElementById("login");
 
 // ********** FUNCTIONS ********** //
 
-async function login() {
-  const response = await fetch("http://localhost:5678/api/users/login", {
-    method: "POST",
-    body: JSON.stringify({
-      email: emailInput.value,
-      password: passwordInput.value
-    }),
-    headers: {
-      "Content-Type": "application/json",
+async function login(event) {
+  event.preventDefault();
+
+  const authData = {
+    email: emailElt.value,
+    password: passElt.value
+  };
+
+  try {
+    const response = await fetch(LOGIN_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(authData)
+    });
+
+    if (!response.ok) {
+      throw new Error(response.status);
     }
-  })
 
-  const result = await response.json();
+    const result = await response.json();
 
-  if (response.ok) {
-    // Stock the token in local storage
-    localStorage.setItem("token", result.token);
-    // Redirect to index.html
-    window.location.href = "index.html";
-  } else {
-    alert("Votre e-mail ou mot de passe est incorrect");
+    if (result.token) {
+      localStorage.setItem("userId", result.userId);
+      localStorage.setItem("token", result.token);
+
+      window.location.href = "index.html";
+    }
+
+  } catch (error) {
+    if (error.message === "404") {
+      alert ("E-mail ou mot de passe incorrect !");
+
+    } else {
+      console.error(error)
+    }
   }
-}
+};
 
 // ********** MAIN CODE ********** //
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  login();
-})
+loginElt.addEventListener("click", login);
+

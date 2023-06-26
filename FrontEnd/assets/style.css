@@ -181,21 +181,21 @@ li a:hover {
 
 }
 #contact,
-#login {
+#auth {
   width: 50%;
   margin: auto;
 }
 #contact > *,
-#login > * {
+#auth > * {
   text-align: center;
 
 }
 #contact h2,
-#login h2 {
+#auth h2 {
   margin-bottom: 20px;
 }
 #contact form,
-#login form {
+#auth form {
   text-align: left;
   margin-top:30px;
   display: flex;
@@ -203,14 +203,15 @@ li a:hover {
 }
 
 #contact input,
-#login input {
+#auth input,
+#login {
   height: 50px;
   font-size: 1.2em;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 #contact label,
-#login label {
+#auth label {
   margin: 2em 0 1em 0;
 }
 #contact textarea {
@@ -218,7 +219,8 @@ li a:hover {
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+input[type="submit"],
+#login {
   font-family: 'Syne';
   font-weight: 700;
   color: white;
@@ -230,8 +232,9 @@ input[type="submit"]{
   cursor: pointer;
 }
 
-#login p {
+#auth a {
   text-decoration: underline;
+  color: #3D3D3D;
 }
 
 footer nav ul {

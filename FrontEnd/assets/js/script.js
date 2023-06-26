@@ -135,3 +135,8 @@ fetchWorks()
   .catch(error => console.log(error));
 
 addListeners();
+
+// Pour vérifier qu'on est bien connecté
+if (localStorage.getItem("token")) {
+  alert("Connecté !");
+} 
