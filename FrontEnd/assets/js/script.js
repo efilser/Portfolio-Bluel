@@ -21,9 +21,7 @@ let works = [];
  */
 async function fetchWorks() {
   const response = await fetch("http://localhost:5678/api/works");
-  const data = await response.json();
-
-  works = data;
+  works = await response.json();
 }
 
 /**
@@ -47,6 +45,22 @@ function addWorks(works) {
     figure.appendChild(figcaption);
     gallery.appendChild(figure);
   });
+}
+
+function displayAdminPage() {
+  const authElt = document.querySelector("[href='login.html']");
+  authElt.innerText = "logout";
+  authElt.setAttribute("href", "#");
+  authElt.addEventListener("click", () => { 
+    localStorage.removeItem("token") && localStorage.removeItem("userId");
+    window.location.reload();
+  });
+
+  const introImg = document.querySelector('#introduction figure');
+  const editImg = document.createElement('button');
+  editImg.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  introImg.appendChild(editImg);
+
 }
 
 /**
@@ -131,12 +145,12 @@ function addListeners() {
 // ********** MAIN CODE ********** //
 
 fetchWorks()
-  .then(data => addWorks(works))
-  .catch(error => console.log(error));
+  .then(() => {
+    addWorks(works);
+    addListeners();
 
-addListeners();
-
-// Pour vérifier qu'on est bien connecté
-if (localStorage.getItem("token")) {
-  alert("Connecté !");
-} 
+    if (localStorage.getItem("token")) {
+      displayAdminPage();
+    } 
+  })
+  .catch(error => console.log(error))
