@@ -1,6 +1,6 @@
 /* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
+  v2.0 | 20110126
+  License: none (public domain)
 */
 
 html, body, div, span, applet, object, iframe,
@@ -16,173 +16,285 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
-	display: block;
+  display: block;
 }
 body {
-	line-height: 1;
+  line-height: 1;
 }
 ol, ul {
-	list-style: none;
+  list-style: none;
 }
 blockquote, q {
-	quotes: none;
+  quotes: none;
 }
 blockquote:before, blockquote:after,
 q:before, q:after {
-	content: '';
-	content: none;
+  content: '';
+  content: none;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 /** end reset css**/
 body {
-	max-width: 1140px;
-	margin:auto;
-	font-family: 'Work Sans' ;
-	font-size: 14px;
+  max-width: 1140px;
+  margin:auto;
+  font-family: 'Work Sans' ;
+  font-size: 14px;
 }
 header {
-	display: flex;
-	justify-content: space-between;
-	margin: 50px 0
+  display: flex;
+  justify-content: space-between;
+  margin: 50px 0
 }
 section {
-	margin: 50px 0
+  margin: 50px 0
 }
 
 h1{
-	display: flex;
-	flex-direction: column;
-	font-family: 'Syne';
-	font-size: 22px;
-	font-weight: 800;
-	color: #B1663C
+  display: flex;
+  flex-direction: column;
+  font-family: 'Syne';
+  font-size: 22px;
+  font-weight: 800;
+  color: #B1663C
 }
 
 h1 > span {
-	font-family: 'Work Sans';
-	font-size:10px;
-	letter-spacing: 0.1em;
-;
+  font-family: 'Work Sans';
+  font-size:10px;
+  letter-spacing: 0.1em;
 }
 
 h2{
-	font-family: 'Syne';
-	font-weight: 700;
-	font-size: 30px;
-	color: #1D6154
+  font-family: 'Syne';
+  font-weight: 700;
+  font-size: 30px;
+  color: #1D6154
 }
 nav ul {
-	display: flex;
-	align-items: center;
-	list-style-type: none;
+  display: flex;
+  align-items: center;
+  list-style-type: none;
 
 }
 nav li {
-	padding: 0 10px;
-	font-size: 1.2em;
+  padding: 0 10px;
+  font-size: 1.2em;
 }
 
-li:hover {
-	color: #B1663C;
+li a {
+  text-decoration: none;
+  color: black;
 }
+
+li a:hover {
+  color: #B1663C;
+}
+
 #introduction {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 #introduction figure {
-	flex: 1
+  flex: 1
 }
 #introduction img {
-	display: block;
-	margin: auto;
-	width: 80%;
+  display: block;
+  margin: auto;
+  width: 80%;
 }
 
 #introduction article {
-	flex: 1
+  flex: 1
 }
 #introduction h2 {
-	margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 #introduction p {
-	margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
 }
 #portfolio h2 {
-	text-align: center;
-	margin-bottom: 1em;
+  text-align: center;
+  margin-bottom: 1em;
 }
+
+.filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+.filters ul {
+  display: flex;
+  gap: 10px;
+  width: 50%;
+}
+
+.filters li {
+  font-family: 'Syne';
+  font-size: 1rem;
+  color: #1D6154;
+  background-color: white;
+  border: #1D6154 1px solid;
+  border-radius: 60px;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
+  padding: 9px;
+  cursor: pointer;
+}
+
+.filters li.active {
+  color: white;
+  background-color: #1D6154;
+}
+
+.filters li:hover,
+.filters li:focus {
+  color: white;
+  background-color: #1D6154;
+}
+
 .gallery {
-	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-column-gap: 20px;
-	grid-row-gap: 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
 }
 
 .gallery img {
-	width: 100%;
+  width: 100%;
 
 }
-#contact {
-	width: 50%;
-margin: auto;
+#contact,
+#auth {
+  width: 50%;
+  margin: auto;
 }
-#contact > * {
-	text-align: center;
+#contact > *,
+#auth > * {
+  text-align: center;
 
 }
-#contact h2{
-	margin-bottom: 20px;
+#contact h2,
+#auth h2 {
+  margin-bottom: 20px;
 }
-#contact form {
-	text-align: left;
-	margin-top:30px;
-	display: flex;
-	flex-direction: column;
+#contact form,
+#auth form {
+  text-align: left;
+  margin-top:30px;
+  display: flex;
+  flex-direction: column;
 }
 
-#contact input {
-	height: 50px;
-	font-size: 1.2em;
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+#contact input,
+#auth input,
+#login {
+  height: 50px;
+  font-size: 1.2em;
+  border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
-	margin: 2em 0 1em 0;
+#contact label,
+#auth label {
+  margin: 2em 0 1em 0;
 }
 #contact textarea {
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
-	font-family: 'Syne';
-	font-weight: 700;
-	color: white;
-	background-color: #1D6154;
-	margin : 2em auto ;
-	width: 180px;
-	text-align: center;
-	border-radius: 60px ;
+input[type="submit"],
+#login {
+  font-family: 'Syne';
+  font-weight: 700;
+  color: white;
+  background-color: #1D6154;
+  margin : 2em auto ;
+  width: 180px;
+  text-align: center;
+  border-radius: 60px ;
+  cursor: pointer;
 }
 
-footer nav ul {
-	display: flex;
-	justify-content: flex-end;
-	margin: 2em
+#auth a {
+  text-decoration: underline;
+  color: #3D3D3D;
 }
 
+footer nav ul,
+footer a {
+  display: flex;
+  justify-content: flex-end;
+  margin: 2em
+}
+
+footer a {
+  text-decoration: none;
+  color: black;
+}
+
+/***** CSS for JS insertion *****/
+
+body > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 21px;
+  background-color: black;
+  height: 59px;
+}
+
+button {
+  border: none;
+  background-color: rgba(0, 0, 0, 0.0);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+/* editBanner in JS */
+.btn-1 {
+  color: white;
+  font-size: 1rem;
+}
+
+/* publishChanges in JS */
+.btn-2 {
+  color: black;
+  background-color: white;
+  border-radius: 60px;
+  width: 216px;
+  height: 38px;
+}
+
+/* editImg in JS */
+.btn-3 {
+  margin-top: 15px;
+  margin-left: 54px;
+}
+
+/* editArticle in JS */
+.btn-4 {
+  margin-bottom: 19px;
+  margin-left: -2px;
+}
+
+/* editGallery in JS */
+.btn-5 {
+  margin-left: 31px;
+}
