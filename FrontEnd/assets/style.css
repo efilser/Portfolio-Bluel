@@ -237,8 +237,64 @@ input[type="submit"],
   color: #3D3D3D;
 }
 
-footer nav ul {
+footer nav ul,
+footer a {
   display: flex;
   justify-content: flex-end;
   margin: 2em
+}
+
+footer a {
+  text-decoration: none;
+  color: black;
+}
+
+/***** CSS for JS insertion *****/
+
+body > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 21px;
+  background-color: black;
+  height: 59px;
+}
+
+button {
+  border: none;
+  background-color: rgba(0, 0, 0, 0.0);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+/* editBanner in JS */
+.btn-1 {
+  color: white;
+  font-size: 1rem;
+}
+
+/* publishChanges in JS */
+.btn-2 {
+  color: black;
+  background-color: white;
+  border-radius: 60px;
+  width: 216px;
+  height: 38px;
+}
+
+/* editImg in JS */
+.btn-3 {
+  margin-top: 15px;
+  margin-left: 54px;
+}
+
+/* editArticle in JS */
+.btn-4 {
+  margin-bottom: 19px;
+  margin-left: -2px;
+}
+
+/* editGallery in JS */
+.btn-5 {
+  margin-left: 31px;
 }

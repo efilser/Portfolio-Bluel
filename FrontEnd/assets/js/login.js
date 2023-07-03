@@ -51,4 +51,3 @@ async function login(event) {
 // ********** MAIN CODE ********** //
 
 loginElt.addEventListener("click", login);
-

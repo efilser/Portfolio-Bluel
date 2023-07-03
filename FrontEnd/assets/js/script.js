@@ -47,20 +47,60 @@ function addWorks(works) {
   });
 }
 
+/**
+ * Displays the admin page.
+ *
+ * @param {type} paramName - description of parameter
+ * @return {type} description of return value
+ */
 function displayAdminPage() {
-  const authElt = document.querySelector("[href='login.html']");
+  const authElt = document.querySelector('[href="login.html"]');
   authElt.innerText = "logout";
   authElt.setAttribute("href", "#");
-  authElt.addEventListener("click", () => { 
+  authElt.addEventListener("click", (event) => { 
+    event.preventDefault();
     localStorage.removeItem("token") && localStorage.removeItem("userId");
-    window.location.reload();
+    authElt.innerText = "login";
+    authElt.setAttribute("href", "login.html");
+    bodyBanner.remove();
+    editBanner.remove();
+    publishChanges.remove();
+    editImg.remove();
+    editArticle.remove();
+    editGallery.remove();
+    alert ("Vous êtes déconnecté");
   });
+
+  const body = document.querySelector("body");
+  const bodyBanner = document.createElement('div');
+  const editBanner = document.createElement('button');
+  editBanner.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Mode édition';
+  editBanner.classList.add("btn-1");
+  const publishChanges = document.createElement('button');
+  publishChanges.innerText = "publier les changements";
+  publishChanges.classList.add("btn-2");
+  body.insertBefore(bodyBanner, body.firstChild);
+  bodyBanner.appendChild(editBanner);
+  bodyBanner.appendChild(publishChanges);
 
   const introImg = document.querySelector('#introduction figure');
   const editImg = document.createElement('button');
   editImg.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  editImg.classList.add("btn-3");
   introImg.appendChild(editImg);
 
+
+  const introArticle = document.querySelector('#introduction article');
+  const editArticle = document.createElement('button');
+  editArticle.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  editArticle.classList.add("btn-4");
+  introArticle.insertBefore(editArticle, introArticle.firstChild);
+
+  const portfolioGallery = document.querySelector('#portfolio h2');
+  const editGallery = document.createElement('button');
+  editGallery.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  editGallery.classList.add("btn-5");
+  portfolioGallery.insertAdjacentElement('afterend', editGallery);
 }
 
 /**
