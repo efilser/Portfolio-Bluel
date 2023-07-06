@@ -7,6 +7,7 @@ const allFilter = document.getElementById("all");
 const objectsFilter = document.getElementById("objects");
 const apartmentsFilter = document.getElementById("apartments");
 const hotelsResFilter = document.getElementById("hotelsRes");
+const authElt = document.querySelector('[href="login.html"]');
 
 // ********** VARIABLES ********** //
 
@@ -54,53 +55,169 @@ function addWorks(works) {
  * @return {type} description of return value
  */
 function displayAdminPage() {
-  const authElt = document.querySelector('[href="login.html"]');
-  authElt.innerText = "logout";
+  const body              = document.querySelector("body");
+  const introImg          = document.querySelector('#introduction figure');
+  const introArticle      = document.querySelector('#introduction article');
+  const portfolioGallery  = document.querySelector('#portfolio h2');
+
+  const bodyBanner      = document.createElement('div');
+  const editBanner      = document.createElement('button');
+  const editChanges     = document.createElement('button');
+  const editImg         = document.createElement('button');
+  const editArticle     = document.createElement('button');
+  const editGallery     = document.createElement('button');
+
+  authElt.innerText         = "logout";
+  editBanner.innerHTML      = '<i class="fa-regular fa-pen-to-square"></i> Mode édition';
+  editChanges.innerText     = "publier les changements";
+  editImg.innerHTML         = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  editArticle.innerHTML     = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  editGallery.innerHTML     = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+
   authElt.setAttribute("href", "#");
   authElt.addEventListener("click", (event) => { 
-    event.preventDefault();
-    localStorage.removeItem("token") && localStorage.removeItem("userId");
-    authElt.innerText = "login";
-    authElt.setAttribute("href", "login.html");
-    bodyBanner.remove();
-    editBanner.remove();
-    publishChanges.remove();
-    editImg.remove();
-    editArticle.remove();
-    editGallery.remove();
-    alert ("Vous êtes déconnecté");
+    logout(event, bodyBanner, editBanner, editChanges, editImg, editArticle, editGallery)
   });
 
-  const body = document.querySelector("body");
-  const bodyBanner = document.createElement('div');
-  const editBanner = document.createElement('button');
-  editBanner.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Mode édition';
   editBanner.classList.add("btn-1");
-  const publishChanges = document.createElement('button');
-  publishChanges.innerText = "publier les changements";
-  publishChanges.classList.add("btn-2");
-  body.insertBefore(bodyBanner, body.firstChild);
-  bodyBanner.appendChild(editBanner);
-  bodyBanner.appendChild(publishChanges);
-
-  const introImg = document.querySelector('#introduction figure');
-  const editImg = document.createElement('button');
-  editImg.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  editChanges.classList.add("btn-2");
   editImg.classList.add("btn-3");
-  introImg.appendChild(editImg);
-
-
-  const introArticle = document.querySelector('#introduction article');
-  const editArticle = document.createElement('button');
-  editArticle.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
   editArticle.classList.add("btn-4");
-  introArticle.insertBefore(editArticle, introArticle.firstChild);
-
-  const portfolioGallery = document.querySelector('#portfolio h2');
-  const editGallery = document.createElement('button');
-  editGallery.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
   editGallery.classList.add("btn-5");
+
+  body.insertBefore(bodyBanner, body.firstChild);
+  introArticle.insertBefore(editArticle, introArticle.firstChild);
+  bodyBanner.appendChild(editBanner);
+  bodyBanner.appendChild(editChanges);
+  introImg.appendChild(editImg);
   portfolioGallery.insertAdjacentElement('afterend', editGallery);
+}
+
+/**
+ * Logs out the current user and performs necessary cleanup.
+ *
+ * @param {Event} event - The event object triggered by the logout action.
+ * @param {HTMLElement} bodyBanner - The banner element representing the body.
+ * @param {HTMLElement} editBanner - The banner element representing the edit section.
+ * @param {HTMLElement} editChanges - The element for publishing changes.
+ * @param {HTMLElement} editImg - The element for editing images.
+ * @param {HTMLElement} editArticle - The element for editing articles.
+ * @param {HTMLElement} editGallery - The element for editing galleries.
+ */
+function logout(event, bodyBanner, editBanner, editChanges, editImg, editArticle, editGallery) {
+  event.preventDefault();
+
+  const loginLink = document.createElement("a");
+  loginLink.href = "login.html";
+  loginLink.innerText = "login";
+
+  authElt.parentNode.replaceChild(loginLink, authElt);
+
+  bodyBanner.remove();
+  editBanner.remove();
+  editChanges.remove();
+  editImg.remove();
+  editArticle.remove();
+  editGallery.remove();
+
+if (localStorage.getItem("token")) {
+  alert ("Vous êtes déconnecté");
+  }
+
+  localStorage.removeItem("token") && localStorage.removeItem("userId");
+}
+
+/**
+ * Creates a modal and adds it to the document body.
+ *
+ *
+ */
+function createModal() {
+  const modalContainer = document.createElement('div');
+  modalContainer.classList.add('modal-container');
+  modalContainer.setAttribute('role', 'dialog','aria-modal', 'true','aria-labelledby', 'modal-title');
+  modalContainer.addEventListener('click', closeModal);
+
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal-content');
+  modalContent.addEventListener('click', event => event.stopPropagation());
+
+  const closeButton = document.createElement('button');
+  closeButton.classList.add('modal-close');
+  closeButton.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+  closeButton.setAttribute('aria-label', 'Close');
+  closeButton.addEventListener('click', closeModal);
+
+  const modalTitle = document.createElement('h3');
+  modalTitle.classList.add('modal-title');
+  modalTitle.textContent = 'Galerie photo';
+  modalTitle.setAttribute('id', 'modal-title');
+
+  const imagesContainer = document.createElement('div');
+  imagesContainer.classList.add('images-container');
+
+  // Loop through the works array to create image thumbnails and edit buttons
+  for (let i = 0; i < works.length; i++) {
+    const imageWrapper = document.createElement('div');
+    imageWrapper.classList.add('image-wrapper');
+
+    const image = document.createElement('img');
+    image.src = works[i].imageUrl;
+
+    const editButton = document.createElement('button');
+    editButton.textContent = 'éditer';
+
+    imageWrapper.appendChild(image);
+    imageWrapper.appendChild(editButton);
+    imagesContainer.appendChild(imageWrapper);
+  }
+
+  const separator = document.createElement('div');
+  separator.classList.add('separator');
+
+  const addButton = document.createElement('button');
+  addButton.classList.add('modal-button');
+  addButton.textContent = 'Ajouter une photo';
+
+  const deleteButton = document.createElement('button');
+  deleteButton.classList.add('modal-button');
+  deleteButton.textContent = 'Supprimer la galerie';
+
+  modalContent.appendChild(closeButton);
+  modalContent.appendChild(modalTitle);
+  modalContent.appendChild(imagesContainer);
+  modalContent.appendChild(separator);
+  modalContent.appendChild(addButton);
+  modalContent.appendChild(deleteButton);
+
+  modalContainer.appendChild(modalContent);
+
+  document.body.appendChild(modalContainer);
+
+  document.addEventListener('keydown', handleKeyPress);
+}
+
+/**
+ * Closes the modal.
+ *
+ * 
+ */
+function closeModal() {
+  const modalContainer = document.querySelector('.modal-container');
+  modalContainer.remove();
+
+  document.removeEventListener('keydown', handleKeyPress);
+}
+
+/**
+ * Handles key press events.
+ *
+ * @param {Event} event - The key press event.
+ */
+function handleKeyPress(event) {
+  if (event.key === 'Escape') {
+    closeModal();
+  }
 }
 
 /**
@@ -191,6 +308,8 @@ fetchWorks()
 
     if (localStorage.getItem("token")) {
       displayAdminPage();
+      const modalButton = document.querySelector('.btn-5');
+      modalButton.addEventListener('click', createModal);
     } 
   })
-  .catch(error => console.log(error))
+  .catch(error => console.log(error));

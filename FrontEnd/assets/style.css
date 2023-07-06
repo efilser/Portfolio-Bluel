@@ -298,3 +298,79 @@ button {
 .btn-5 {
   margin-left: 31px;
 }
+
+/***** Modal *****/
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  position: relative;
+  width: 630px;
+  height: 731px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.images-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-wrapper img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.separator {
+  width: 420px;
+  height: 1px;
+  background-color: #b3b3b3;
+  margin-bottom: 20px;
+}
+
+.modal-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-button + .modal-button {
+  margin-left: 10px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 26px;
+  right: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+}
