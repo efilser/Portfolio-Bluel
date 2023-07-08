@@ -8,6 +8,7 @@ const objectsFilter = document.getElementById("objects");
 const apartmentsFilter = document.getElementById("apartments");
 const hotelsResFilter = document.getElementById("hotelsRes");
 const authElt = document.querySelector('[href="login.html"]');
+const header = document.querySelector("header");
 
 // ********** VARIABLES ********** //
 
@@ -74,6 +75,7 @@ function displayAdminPage() {
   editArticle.innerHTML     = '<i class="fa-regular fa-pen-to-square"></i> modifier';
   editGallery.innerHTML     = '<i class="fa-regular fa-pen-to-square"></i> modifier';
 
+  header.classList.add('header-admin');
   authElt.setAttribute("href", "#");
   authElt.addEventListener("click", (event) => { 
     logout(event, bodyBanner, editBanner, editChanges, editImg, editArticle, editGallery)
@@ -112,6 +114,7 @@ function logout(event, bodyBanner, editBanner, editChanges, editImg, editArticle
   loginLink.innerText = "login";
 
   authElt.parentNode.replaceChild(loginLink, authElt);
+  header.classList.remove('header-admin');
 
   bodyBanner.remove();
   editBanner.remove();
@@ -135,7 +138,9 @@ if (localStorage.getItem("token")) {
 function createModal() {
   const modalContainer = document.createElement('div');
   modalContainer.classList.add('modal-container');
-  modalContainer.setAttribute('role', 'dialog','aria-modal', 'true','aria-labelledby', 'modal-title');
+  modalContainer.setAttribute('role', 'dialog');
+  modalContainer.setAttribute('aria-modal', 'true');
+  modalContainer.setAttribute('aria-labelledby', 'modal-title');
   modalContainer.addEventListener('click', closeModal);
 
   const modalContent = document.createElement('div');
@@ -164,10 +169,20 @@ function createModal() {
     const image = document.createElement('img');
     image.src = works[i].imageUrl;
 
+    const moveButton = document.createElement('i');
+    moveButton.classList.add('fa-solid');
+    moveButton.classList.add('fa-arrows-up-down-left-right');
+
+    const trashButton = document.createElement('i');
+    trashButton.classList.add('fa-solid');
+    trashButton.classList.add('fa-trash-can');
+
     const editButton = document.createElement('button');
     editButton.textContent = 'éditer';
 
     imageWrapper.appendChild(image);
+    imageWrapper.appendChild(moveButton);
+    imageWrapper.appendChild(trashButton);
     imageWrapper.appendChild(editButton);
     imagesContainer.appendChild(imageWrapper);
   }
@@ -176,11 +191,11 @@ function createModal() {
   separator.classList.add('separator');
 
   const addButton = document.createElement('button');
-  addButton.classList.add('modal-button');
+  addButton.classList.add('modal-addbtn');
   addButton.textContent = 'Ajouter une photo';
 
   const deleteButton = document.createElement('button');
-  deleteButton.classList.add('modal-button');
+  deleteButton.classList.add('modal-deletebtn');
   deleteButton.textContent = 'Supprimer la galerie';
 
   modalContent.appendChild(closeButton);
@@ -215,7 +230,7 @@ function closeModal() {
  * @param {Event} event - The key press event.
  */
 function handleKeyPress(event) {
-  if (event.key === 'Escape') {
+  if (event.key === 'Escape' || event.key === 'Esc') {
     closeModal();
   }
 }
