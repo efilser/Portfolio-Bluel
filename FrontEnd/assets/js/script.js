@@ -176,6 +176,10 @@ function createModal() {
     const trashButton = document.createElement('i');
     trashButton.classList.add('fa-solid');
     trashButton.classList.add('fa-trash-can');
+    trashButton.addEventListener('click', () => {
+      const imageId = works[i].id;
+      deleteImage(imageId);
+    });
 
     const editButton = document.createElement('button');
     editButton.textContent = 'éditer';
@@ -210,6 +214,24 @@ function createModal() {
   document.body.appendChild(modalContainer);
 
   document.addEventListener('keydown', handleKeyPress);
+}
+
+async function deleteImage(imageId) {
+  try {
+    const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
+      method: 'DELETE',
+    });
+    if (response.ok) {
+      const imageWrapper = document.querySelector(`.image-wrapper[data-id="${imageId}"]`);
+      if (imageWrapper) {
+        imageWrapper.remove();
+  }
+    } else {
+      console.error('Image deletion failed:', response.status);
+    }
+  } catch (error) {
+    console.error('Error deleting image:', error);
+  }
 }
 
 /**
