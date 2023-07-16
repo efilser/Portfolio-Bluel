@@ -305,13 +305,19 @@ button {
 }
 
 /* editGallery in JS */
-.btn-5 {
+.editWorksBtn {
   margin-left: 31px;
 }
 
 /***** Modal *****/
 
-.modal-container {
+.modal-container,
+.add-modal-container {
+  display: none;
+}
+
+.modal-container.show,
+.add-modal-container.show {
   position: fixed;
   top: 0;
   left: 0;
@@ -377,6 +383,12 @@ button {
 
 .fa-arrows-up-down-left-right {
   right: 26px;
+  display: none;
+}
+
+.image-wrapper:hover .fa-arrows-up-down-left-right,
+.image-wrapper:focus .fa-arrows-up-down-left-right {
+  display: flex;
 }
 
 .image-wrapper button {
@@ -410,6 +422,66 @@ button {
   position: absolute;
   top: 26px;
   right: 30px;
-  font-size: 1rem;
+  font-size: 24px;
   cursor: pointer;
+}
+
+.add-modal-content {
+  height: 670px;
+}
+
+.modal-return {
+  position: absolute;
+  top: 26px;
+  left: 30px;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.add-modal-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-photo-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #E8F1F6;
+  width: 420px;
+  height: 169px;
+  margin-bottom: 30px;
+}
+
+.fa-image {
+  color: #B9C5CC;
+  font-size: 58px;
+  margin-bottom: 15px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.add-photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 173px;
+  height: 36px;
+  background-color: #CBD6DC;
+  border-radius: 60px;
+  cursor: pointer;
+  color: #306685;
+  margin-bottom: 7px;
+}
+
+.size-info {
+  color: #444444;
+  font-size: 10px;
+}
+
+.validation-btn {
+  background-color: #A7A7A7;
 }

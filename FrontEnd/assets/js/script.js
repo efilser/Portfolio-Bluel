@@ -14,6 +14,9 @@ const header = document.querySelector("header");
 
 let works = [];
 
+let modalContainer = null;
+let addModalContainer = null;
+
 // ********** FUNCTIONS ********** //
 
 /**
@@ -85,7 +88,7 @@ function displayAdminPage() {
   editChanges.classList.add("btn-2");
   editImg.classList.add("btn-3");
   editArticle.classList.add("btn-4");
-  editGallery.classList.add("btn-5");
+  editGallery.classList.add("editWorksBtn");
 
   body.insertBefore(bodyBanner, body.firstChild);
   introArticle.insertBefore(editArticle, introArticle.firstChild);
@@ -131,119 +134,288 @@ if (localStorage.getItem("token")) {
 }
 
 /**
- * Creates a modal and adds it to the document body.
+ * Creates a modal and appends it to the document body if it doesn't already exist.
  *
  *
  */
 function createModal() {
-  const modalContainer = document.createElement('div');
-  modalContainer.classList.add('modal-container');
-  modalContainer.setAttribute('role', 'dialog');
-  modalContainer.setAttribute('aria-modal', 'true');
-  modalContainer.setAttribute('aria-labelledby', 'modal-title');
-  modalContainer.addEventListener('click', closeModal);
+  if (!modalContainer) {
+    modalContainer = document.createElement('div');
+    modalContainer.classList.add('modal-container');
+    modalContainer.setAttribute('role', 'dialog');
+    modalContainer.setAttribute('aria-modal', 'true');
+    modalContainer.setAttribute('aria-labelledby', 'modal-title');
+    modalContainer.addEventListener('click', closeModal);
 
-  const modalContent = document.createElement('div');
-  modalContent.classList.add('modal-content');
-  modalContent.addEventListener('click', event => event.stopPropagation());
+    const modalContent = document.createElement('div');
+    modalContent.classList.add('modal-content');
+    modalContent.addEventListener('click', event => event.stopPropagation());
 
-  const closeButton = document.createElement('button');
-  closeButton.classList.add('modal-close');
-  closeButton.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-  closeButton.setAttribute('aria-label', 'Close');
-  closeButton.addEventListener('click', closeModal);
+    const closeButton = document.createElement('i');
+    closeButton.classList.add('fa-solid', 'fa-xmark', 'modal-close');
+    closeButton.setAttribute('aria-label', 'Close');
+    closeButton.addEventListener('click', closeModal);
 
-  const modalTitle = document.createElement('h3');
-  modalTitle.classList.add('modal-title');
-  modalTitle.textContent = 'Galerie photo';
-  modalTitle.setAttribute('id', 'modal-title');
+    const modalTitle = document.createElement('h3');
+    modalTitle.classList.add('modal-title');
+    modalTitle.textContent = 'Galerie photo';
+    modalTitle.setAttribute('id', 'modal-title');
 
-  const imagesContainer = document.createElement('div');
-  imagesContainer.classList.add('images-container');
+    const imagesContainer = document.createElement('div');
+    imagesContainer.classList.add('images-container');
 
-  // Loop through the works array to create image thumbnails and edit buttons
-  for (let i = 0; i < works.length; i++) {
-    const imageWrapper = document.createElement('div');
-    imageWrapper.classList.add('image-wrapper');
+    // Loop through the works array to create image thumbnails and edit buttons
+    for (let i = 0; i < works.length; i++) {
+      const imageWrapper = document.createElement('div');
+      imageWrapper.classList.add('image-wrapper');
 
-    const image = document.createElement('img');
-    image.src = works[i].imageUrl;
+      const image = document.createElement('img');
+      image.src = works[i].imageUrl;
 
-    const moveButton = document.createElement('i');
-    moveButton.classList.add('fa-solid');
-    moveButton.classList.add('fa-arrows-up-down-left-right');
+      const moveButton = document.createElement('i');
+      moveButton.classList.add('fa-solid', 'fa-arrows-up-down-left-right');
 
-    const trashButton = document.createElement('i');
-    trashButton.classList.add('fa-solid');
-    trashButton.classList.add('fa-trash-can');
-    trashButton.addEventListener('click', () => {
-      const imageId = works[i].id;
-      deleteImage(imageId);
+      const trashButton = document.createElement('i');
+      trashButton.classList.add('fa-solid', 'fa-trash-can');
+      trashButton.addEventListener('click', () => {
+        const imageId = works[i].id;
+        const imageTitle = works[i].title
+        deleteImage(imageId, imageTitle);
+      });
+
+      const editButton = document.createElement('button');
+      editButton.textContent = 'éditer';
+
+      imageWrapper.appendChild(image);
+      imageWrapper.appendChild(moveButton);
+      imageWrapper.appendChild(trashButton);
+      imageWrapper.appendChild(editButton);
+      imagesContainer.appendChild(imageWrapper);
+    }
+
+    const separator = document.createElement('div');
+    separator.classList.add('separator');
+
+    const addButton = document.createElement('button');
+    addButton.classList.add('modal-addbtn');
+    addButton.textContent = 'Ajouter une photo';
+    addButton.addEventListener('click', () => {
+      closeModal();
+      createAddModal();
     });
 
-    const editButton = document.createElement('button');
-    editButton.textContent = 'éditer';
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('modal-deletebtn');
+    deleteButton.textContent = 'Supprimer la galerie';
 
-    imageWrapper.appendChild(image);
-    imageWrapper.appendChild(moveButton);
-    imageWrapper.appendChild(trashButton);
-    imageWrapper.appendChild(editButton);
-    imagesContainer.appendChild(imageWrapper);
+    modalContent.appendChild(closeButton);
+    modalContent.appendChild(modalTitle);
+    modalContent.appendChild(imagesContainer);
+    modalContent.appendChild(separator);
+    modalContent.appendChild(addButton);
+    modalContent.appendChild(deleteButton);
+
+    modalContainer.appendChild(modalContent);
+
+    document.body.appendChild(modalContainer);
+
+    document.addEventListener('keydown', handleKeyPress);
   }
 
-  const separator = document.createElement('div');
-  separator.classList.add('separator');
-
-  const addButton = document.createElement('button');
-  addButton.classList.add('modal-addbtn');
-  addButton.textContent = 'Ajouter une photo';
-
-  const deleteButton = document.createElement('button');
-  deleteButton.classList.add('modal-deletebtn');
-  deleteButton.textContent = 'Supprimer la galerie';
-
-  modalContent.appendChild(closeButton);
-  modalContent.appendChild(modalTitle);
-  modalContent.appendChild(imagesContainer);
-  modalContent.appendChild(separator);
-  modalContent.appendChild(addButton);
-  modalContent.appendChild(deleteButton);
-
-  modalContainer.appendChild(modalContent);
-
-  document.body.appendChild(modalContainer);
-
-  document.addEventListener('keydown', handleKeyPress);
+  modalContainer.classList.add('show');
 }
 
-async function deleteImage(imageId) {
-  try {
-    const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
-      method: 'DELETE',
+/**
+ * Creates an add modal that allows users to add a photo with a title and category.
+ *
+ *
+ */
+function createAddModal() {
+  if (!addModalContainer) {
+    addModalContainer = document.createElement('div');
+    addModalContainer.classList.add('add-modal-container');
+    addModalContainer.setAttribute('role', 'dialog');
+    addModalContainer.setAttribute('aria-modal', 'true');
+    addModalContainer.setAttribute('aria-labelledby', 'modal-title');
+    addModalContainer.addEventListener('click', closeAddModal);
+
+    const addModalContent = document.createElement('div');
+    addModalContent.classList.add('modal-content', 'add-modal-content');
+    addModalContent.addEventListener('click', event => event.stopPropagation());
+
+    const addCloseButton = document.createElement('i');
+    addCloseButton.classList.add('fa-solid', 'fa-xmark', 'modal-close');
+    addCloseButton.setAttribute('aria-label', 'Close');
+    addCloseButton.addEventListener('click', (closeAddModal));
+
+    const addReturnButton = document.createElement('i');
+    addReturnButton.classList.add('fa-solid', 'fa-arrow-left', 'modal-return');
+    addReturnButton.setAttribute('aria-label', 'Return');
+    addReturnButton.addEventListener('click', () => {
+      closeAddModal();
+      createModal();
     });
-    if (response.ok) {
-      const imageWrapper = document.querySelector(`.image-wrapper[data-id="${imageId}"]`);
-      if (imageWrapper) {
-        imageWrapper.remove();
+
+    const addModalTitle = document.createElement('h3');
+    addModalTitle.classList.add('modal-title');
+    addModalTitle.textContent = 'Ajout Photo';
+    addModalTitle.setAttribute('id', 'modal-title');
+
+    const form = document.createElement('form');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+    });
+
+    const addPhotoWindow = document.createElement('div');
+    addPhotoWindow.classList.add('add-photo-window');
+
+    const addIcon = document.createElement('i');
+    addIcon.classList.add('fa-regular', 'fa-image');
+
+    const addLabel = document.createElement('label');
+    addLabel.classList.add('add-photo');
+    addLabel.textContent = '+ Ajouter photo';
+
+    const addPhoto = document.createElement('input');
+    addPhoto.type = 'file';
+    addPhoto.accept = '.jpeg, .jpg, .png';
+
+    const sizeInfo = document.createElement('p');
+    sizeInfo.classList.add('size-info');
+    sizeInfo.textContent = 'jpg, png : 4mo max';
+
+    const titleLabel = document.createElement('label');
+    titleLabel.textContent = 'Titre';
+  
+    const addTitle = document.createElement('input');
+    addTitle.type = 'text';
+
+    const categoryLabel = document.createElement('label');
+    categoryLabel.textContent = 'Catégorie';
+  
+    const addCategory = document.createElement('select');
+    addCategory.classList.add('add-category');
+
+    const defaultOption = document.createElement('option');
+    defaultOption.selected = true;
+
+    const option1 = document.createElement('option');
+    option1.value = 'objets';
+    option1.textContent = 'Objets';
+
+    const option2 = document.createElement('option');
+    option2.value = 'appartements';
+    option2.textContent = 'Appartements';
+
+    const option3 = document.createElement('option');
+    option3.value = 'hotels-restaurants';
+    option3.textContent = 'Hôtels & restaurants';
+
+    const addSeparator = document.createElement('div');
+    addSeparator.classList.add('separator');
+
+    const validationBtn = document.createElement('button');
+    validationBtn.classList.add('modal-addbtn', 'validation-btn');
+    validationBtn.textContent = 'Valider';
+    validationBtn.type = 'submit';
+
+    addPhotoWindow.appendChild(addIcon);
+    addPhotoWindow.appendChild(addLabel);
+    addPhotoWindow.appendChild(sizeInfo);
+
+    addLabel.appendChild(addPhoto);
+
+    addCategory.appendChild(defaultOption);
+    addCategory.appendChild(option1);
+    addCategory.appendChild(option2);
+    addCategory.appendChild(option3);
+
+    titleLabel.appendChild(addTitle);
+    categoryLabel.appendChild(addCategory);
+
+    form.appendChild(addPhotoWindow);
+    form.appendChild(titleLabel);
+    form.appendChild(categoryLabel);
+    form.appendChild(addSeparator);
+    form.appendChild(validationBtn);
+
+    addModalContent.appendChild(addCloseButton);
+    addModalContent.appendChild(addReturnButton);
+    addModalContent.appendChild(addModalTitle);
+    addModalContent.appendChild(form);
+
+    addModalContainer.appendChild(addModalContent);
+
+    document.body.appendChild(addModalContainer);
+
+    document.addEventListener('keydown', handleKeyPress);
   }
-    } else {
-      console.error('Image deletion failed:', response.status);
+
+  addModalContainer.classList.add('show');
+}
+
+/**
+ * Deletes an image from the server.
+ *
+ * @param {string} imageId - The ID of the image to delete.
+ * @param {string} imageTitle - The title of the image to delete.
+ * @return {Promise<void>} A promise that resolves when the image is successfully deleted.
+ */
+async function deleteImage(imageId, imageTitle) {
+  if (confirm(`Êtes-vous sûr de vouloir supprimer la photo : ${imageTitle} ?`)) {
+
+    try {
+      let response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
+        method: 'DELETE',
+        headers: {
+          'authorization': 'Bearer ' + localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      response = await response.json();
+  
+      if (response.ok) {
+        const imageWrapper = document.querySelector(`.image-wrapper[data-id="${imageId}"]`);
+  
+        if (imageWrapper) {
+          imageWrapper.remove();
     }
-  } catch (error) {
-    console.error('Error deleting image:', error);
+      } else {
+        console.error('Image deletion failed:', response.status);
+      }
+    } catch (error) {
+      console.error('Error deleting image:', error);
+    }
   }
 }
 
 /**
- * Closes the modal.
+ * Close the first modal.
  *
- * 
+ *
  */
 function closeModal() {
-  const modalContainer = document.querySelector('.modal-container');
-  modalContainer.remove();
+  modalContainer = document.querySelector('.modal-container');
+  modalContainer.classList.remove('show');
 
   document.removeEventListener('keydown', handleKeyPress);
+}
+
+/**
+ * Close the second modal.
+ *
+ *
+ */
+function closeAddModal() {
+  addModalContainer = document.querySelector('.add-modal-container');
+  addModalContainer.classList.remove('show');
+
+  // Check if the first modal is still open
+  modalContainer = document.querySelector('.modal-container');
+  if (!modalContainer) {
+    document.removeEventListener('keydown', handleKeyPress);
+  }
 }
 
 /**
@@ -253,9 +425,16 @@ function closeModal() {
  */
 function handleKeyPress(event) {
   if (event.key === 'Escape' || event.key === 'Esc') {
-    closeModal();
+    if (addModalContainer) {
+      closeAddModal();
+    } else {
+      closeModal();
+    }
   }
+
+  document.addEventListener('keydown', handleKeyPress); // Re-register the event listener
 }
+
 
 /**
  * Removes the "active" class from objectsFilter, apartmentsFilter and hotelsResFilter, and add it to the allFilter.
@@ -345,7 +524,7 @@ fetchWorks()
 
     if (localStorage.getItem("token")) {
       displayAdminPage();
-      const modalButton = document.querySelector('.btn-5');
+      const modalButton = document.querySelector('.editWorksBtn');
       modalButton.addEventListener('click', createModal);
     } 
   })
