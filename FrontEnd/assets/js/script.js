@@ -218,9 +218,9 @@ function createModal() {
     modalContainer.appendChild(modalContent);
 
     document.body.appendChild(modalContainer);
-
-    document.addEventListener('keydown', handleKeyPress);
   }
+
+  document.addEventListener('keydown', handleKeyPress);
 
   modalContainer.classList.add('show');
 }
@@ -246,7 +246,7 @@ function createAddModal() {
     const addCloseButton = document.createElement('i');
     addCloseButton.classList.add('fa-solid', 'fa-xmark', 'modal-close');
     addCloseButton.setAttribute('aria-label', 'Close');
-    addCloseButton.addEventListener('click', (closeAddModal));
+    addCloseButton.addEventListener('click', closeAddModal);
 
     const addReturnButton = document.createElement('i');
     addReturnButton.classList.add('fa-solid', 'fa-arrow-left', 'modal-return');
@@ -347,9 +347,9 @@ function createAddModal() {
     addModalContainer.appendChild(addModalContent);
 
     document.body.appendChild(addModalContainer);
-
-    document.addEventListener('keydown', handleKeyPress);
   }
+
+  document.addEventListener('keydown', handleKeyPress);
 
   addModalContainer.classList.add('show');
 }
@@ -408,8 +408,7 @@ function closeModal() {
  *
  */
 function closeAddModal() {
-  addModalContainer = document.querySelector('.add-modal-container');
-  addModalContainer.classList.remove('show');
+  document.querySelector('.add-modal-container').classList.remove('show');
 
   // Check if the first modal is still open
   modalContainer = document.querySelector('.modal-container');
@@ -431,8 +430,6 @@ function handleKeyPress(event) {
       closeModal();
     }
   }
-
-  document.addEventListener('keydown', handleKeyPress); // Re-register the event listener
 }
 
 
