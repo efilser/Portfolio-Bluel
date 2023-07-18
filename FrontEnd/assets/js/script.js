@@ -286,13 +286,13 @@ function createAddModal() {
 
     const titleLabel = document.createElement('label');
     titleLabel.textContent = 'Titre';
-  
+
     const addTitle = document.createElement('input');
     addTitle.type = 'text';
 
     const categoryLabel = document.createElement('label');
     categoryLabel.textContent = 'Catégorie';
-  
+
     const addCategory = document.createElement('select');
     addCategory.classList.add('add-category');
 
@@ -318,6 +318,54 @@ function createAddModal() {
     validationBtn.classList.add('modal-addbtn', 'validation-btn');
     validationBtn.textContent = 'Valider';
     validationBtn.type = 'submit';
+    validationBtn.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      // Check if any field is missing
+      if (!addPhoto.files[0] || !addTitle.value || !addCategory.value) {
+        let errorMessage = 'Merci de remplir les champs suivants:';
+
+        if (!addPhoto.files[0]) {
+          errorMessage += '\n- Photo';
+        }
+
+        if (!addTitle.value) {
+          errorMessage += '\n- Titre';
+        }
+
+        if (!addCategory.value) {
+          errorMessage += '\n- Catégorie';
+        }
+
+        alert(errorMessage);
+      } else {
+        // All fields are filled, update the button class
+        validationBtn.classList.add('success');
+
+        // Create a FormData object to send the form data
+        const formData = new FormData();
+        formData.append('image', addPhoto.files[0]);
+        formData.append('title', addTitle.value);
+        formData.append('category', addCategory.value);
+
+        // Send the form data to the API
+        fetch('http://localhost:5678/api/works', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(response => {
+          // Handle the API response
+        })
+        .catch(error => {
+          // Handle any error that occurs during the fetch request
+        });
+      }
+    });
+
 
     addPhotoWindow.appendChild(addIcon);
     addPhotoWindow.appendChild(addLabel);
@@ -352,42 +400,6 @@ function createAddModal() {
   document.addEventListener('keydown', handleKeyPress);
 
   addModalContainer.classList.add('show');
-}
-
-/**
- * Deletes an image from the server.
- *
- * @param {string} imageId - The ID of the image to delete.
- * @param {string} imageTitle - The title of the image to delete.
- * @return {Promise<void>} A promise that resolves when the image is successfully deleted.
- */
-async function deleteImage(imageId, imageTitle) {
-  if (confirm(`Êtes-vous sûr de vouloir supprimer la photo : ${imageTitle} ?`)) {
-
-    try {
-      let response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
-        method: 'DELETE',
-        headers: {
-          'authorization': 'Bearer ' + localStorage.getItem("token"),
-          'Content-Type': 'application/json'
-        }
-      });
-  
-      response = await response.json();
-  
-      if (response.ok) {
-        const imageWrapper = document.querySelector(`.image-wrapper[data-id="${imageId}"]`);
-  
-        if (imageWrapper) {
-          imageWrapper.remove();
-    }
-      } else {
-        console.error('Image deletion failed:', response.status);
-      }
-    } catch (error) {
-      console.error('Error deleting image:', error);
-    }
-  }
 }
 
 /**
@@ -432,6 +444,41 @@ function handleKeyPress(event) {
   }
 }
 
+/**
+ * Deletes an image from the server.
+ *
+ * @param {string} imageId - The ID of the image to delete.
+ * @param {string} imageTitle - The title of the image to delete.
+ * @return {Promise<void>} A promise that resolves when the image is successfully deleted.
+ */
+async function deleteImage(imageId, imageTitle) {
+  if (confirm(`Êtes-vous sûr de vouloir supprimer la photo : ${imageTitle} ?`)) {
+
+    try {
+      let response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem("token"),
+          'Content-Type': 'application/json'
+        }
+      });
+
+      response = await response.json();
+
+      if (response.ok) {
+        const imageWrapper = document.querySelector(`.image-wrapper[data-id="${imageId}"]`);
+
+        if (imageWrapper) {
+          imageWrapper.remove();
+    }
+      } else {
+        console.error('Image deletion failed:', response.status);
+      }
+    } catch (error) {
+      console.error('Error deleting image:', error);
+    }
+  }
+}
 
 /**
  * Removes the "active" class from objectsFilter, apartmentsFilter and hotelsResFilter, and add it to the allFilter.
