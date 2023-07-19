@@ -269,6 +269,11 @@ function createAddModal() {
     const addPhotoWindow = document.createElement('div');
     addPhotoWindow.classList.add('add-photo-window');
 
+    const addPreview = document.createElement('img');
+    addPreview.classList.add('preview-image');
+    addPhotoWindow.appendChild(addPreview);
+
+
     const addIcon = document.createElement('i');
     addIcon.classList.add('fa-regular', 'fa-image');
 
@@ -279,18 +284,44 @@ function createAddModal() {
     const addPhoto = document.createElement('input');
     addPhoto.type = 'file';
     addPhoto.accept = '.jpeg, .jpg, .png';
+    addPhoto.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+    
+      reader.onload = function(e) {
+        addPreview.src = e.target.result;
+    
+        if (file) {
+          addPreview.classList.add('show'); // Show the preview
+          addIcon.classList.add('hide'); // Hide the other elements
+          addLabel.classList.add('hide');
+          addPhoto.classList.add('hide');
+          sizeInfo.classList.add('hide');
+        } else {
+          addPreview.classList.remove('show'); // Hide the preview
+          addIcon.classList.remove('hide'); // Show the other elements
+          addLabel.classList.remove('hide');
+          addPhoto.classList.remove('hide');
+          sizeInfo.classList.remove('hide');
+        }
+      };
+    
+      reader.readAsDataURL(file);
+    });
 
     const sizeInfo = document.createElement('p');
     sizeInfo.classList.add('size-info');
     sizeInfo.textContent = 'jpg, png : 4mo max';
 
     const titleLabel = document.createElement('label');
+    titleLabel.classList.add('text-form-label');
     titleLabel.textContent = 'Titre';
 
     const addTitle = document.createElement('input');
     addTitle.type = 'text';
 
     const categoryLabel = document.createElement('label');
+    categoryLabel.classList.add('select-form-label');
     categoryLabel.textContent = 'Catégorie';
 
     const addCategory = document.createElement('select');
