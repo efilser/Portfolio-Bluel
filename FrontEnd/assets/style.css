@@ -139,10 +139,6 @@ li a:hover {
 #introduction p {
   margin-bottom: 0.5em;
 }
-#portfolio h2 {
-  text-align: center;
-  margin-bottom: 1em;
-}
 
 .filters {
   display: flex;
@@ -292,6 +288,11 @@ body > div:first-child {
 
 .header-admin {
   margin-top: 97px;
+}
+
+#portfolio header {
+  display: flex;
+  justify-content: center;
 }
 
 button {
