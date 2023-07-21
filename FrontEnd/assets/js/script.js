@@ -262,6 +262,8 @@ function createAddModal() {
     addModalTitle.setAttribute('id', 'modal-title');
 
     const form = document.createElement('form');
+    form.setAttribute('method', 'POST');
+    form.setAttribute('enctype', 'multipart/form-data');
     form.addEventListener('submit', function(event) {
       event.preventDefault();
     });
@@ -446,11 +448,21 @@ function closeModal() {
 }
 
 /**
- * Close the second modal.
+ * Close the second modal and reset the form.
  *
  *
  */
 function closeAddModal() {
+  // Reset the form elements to their initial state
+  document.querySelector('.preview-image').src = '';
+  document.querySelector('.preview-image').classList.remove('show');
+  document.querySelector('.fa-image').classList.remove('hide');
+  document.querySelector('.add-photo').classList.remove('hide');
+  document.querySelector('input[type="file"]').classList.remove('hide');
+  document.querySelector('.size-info').classList.remove('hide');
+  document.querySelector('input[type="text"]').value = '';
+  document.querySelector('.add-category').selectedIndex = 0;
+
   document.querySelector('.add-modal-container').classList.remove('show');
 
   // Check if the first modal is still open
