@@ -9,6 +9,7 @@ const apartmentsFilter = document.getElementById("apartments");
 const hotelsResFilter = document.getElementById("hotelsRes");
 const authElt = document.querySelector('[href="login.html"]');
 const header = document.querySelector("header");
+const userId = localStorage.getItem('userId');
 
 // ********** VARIABLES ********** //
 
@@ -380,22 +381,10 @@ function createAddModal() {
         formData.append('image', addPhoto.files[0]);
         formData.append('title', addTitle.value);
         formData.append('category', addCategory.value);
+        formData.append('userId', userId);
 
-        // Send the form data to the API
-        fetch('http://localhost:5678/api/works', {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem("token"),
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        .then(response => {
-          // Handle the API response
-        })
-        .catch(error => {
-          // Handle any error that occurs during the fetch request
-        });
+        // Call the addImage function to send the form data to the API
+        addImage(formData);
       }
     });
 
@@ -506,20 +495,43 @@ async function deleteImage(imageId, imageTitle) {
         }
       });
 
-      response = await response.json();
-
       if (response.ok) {
         const imageWrapper = document.querySelector(`.image-wrapper[data-id="${imageId}"]`);
 
         if (imageWrapper) {
-          imageWrapper.remove();
-    }
+          imageWrapper.parentNode.removeChild(imageWrapper);
+        }
       } else {
         console.error('Image deletion failed:', response.status);
       }
     } catch (error) {
       console.error('Error deleting image:', error);
     }
+  }
+}
+
+async function addImage(formData) {
+  try {
+    const response = await fetch('http://localhost:5678/api/works', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    if (response.ok) {
+      // Handle successful response
+      closeAddModal();
+      createModal(); // Refresh the image grid
+    } else {
+      // Handle unsuccessful response
+      console.error('Image upload failed:', response.status);
+    }
+  } catch (error) {
+    // Handle any error that occurs during the fetch request
+    console.error('Error uploading image:', error);
   }
 }
 
