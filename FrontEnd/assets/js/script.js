@@ -182,6 +182,8 @@ function createModal() {
         const imageId = works[i].id;
         const imageTitle = works[i].title
         deleteImage(imageId, imageTitle);
+
+        imageWrapper.remove(); // Remove the deleted image from the grid
       });
 
       const editButton = document.createElement('button');
@@ -381,7 +383,6 @@ function createAddModal() {
         formData.append('image', addPhoto.files[0]);
         formData.append('title', addTitle.value);
         formData.append('category', addCategory.value);
-        formData.append('userId', userId);
 
         // Call the addImage function to send the form data to the API
         addImage(formData);
@@ -496,11 +497,8 @@ async function deleteImage(imageId, imageTitle) {
       });
 
       if (response.ok) {
-        const imageWrapper = document.querySelector(`.image-wrapper[data-id="${imageId}"]`);
-
-        if (imageWrapper) {
-          imageWrapper.parentNode.removeChild(imageWrapper);
-        }
+        await fetchWorks(); // Reload the works
+        addWorks(works); // Update UI with the reloaded works
       } else {
         console.error('Image deletion failed:', response.status);
       }
