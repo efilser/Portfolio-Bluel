@@ -191,8 +191,6 @@ function createModal() {
         const imageId = works[i].id;
         const imageTitle = works[i].title
         deleteImage(imageId, imageTitle);
-
-        imageWrapper.remove(); // Remove the deleted image from the grid
       });
 
       const editButton = document.createElement('button');
@@ -514,6 +512,7 @@ async function deleteImage(imageId, imageTitle) {
       if (response.ok) {
         await fetchWorks(); // Reload the works
         addWorks(works); // Update UI with the reloaded works
+        imageWrapper.remove(); // Remove the deleted image from the grid
       } else {
         console.error('Image deletion failed:', response.status);
       }
@@ -529,11 +528,11 @@ async function addImage(formData) {
   try {
     const response = await fetch('http://localhost:5678/api/works', {
       method: 'POST',
-      body: formData,
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token"),
         'Content-Type': 'multipart/form-data'
-      }
+      },
+      body: formData
     });
 
     console.log(typeof response, response);
