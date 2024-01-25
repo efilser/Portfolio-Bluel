@@ -64,6 +64,7 @@ function displayAdminPage() {
   const introImg          = document.querySelector('#introduction figure');
   const introArticle      = document.querySelector('#introduction article');
   const portfolioGallery  = document.querySelector('#portfolio h2');
+  const filters           = document.querySelector('.filters');
 
   const bodyBanner      = document.createElement('div');
   const editBanner      = document.createElement('button');
@@ -78,6 +79,9 @@ function displayAdminPage() {
   editImg.innerHTML         = '<i class="fa-regular fa-pen-to-square"></i> modifier';
   editArticle.innerHTML     = '<i class="fa-regular fa-pen-to-square"></i> modifier';
   editGallery.innerHTML     = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+
+  filters.classList.remove('filters');
+  filters.classList.add('hide-filters');
 
   header.classList.add('header-admin');
   authElt.setAttribute("href", "#");
@@ -113,6 +117,8 @@ function displayAdminPage() {
 function logout(event, bodyBanner, editBanner, editChanges, editImg, editArticle, editGallery) {
   event.preventDefault();
 
+  const filters = document.querySelector('.hide-filters');
+
   const loginLink = document.createElement("a");
   loginLink.href = "login.html";
   loginLink.innerText = "login";
@@ -126,6 +132,9 @@ function logout(event, bodyBanner, editBanner, editChanges, editImg, editArticle
   editImg.remove();
   editArticle.remove();
   editGallery.remove();
+
+  filters.classList.remove('hide-filters');
+  filters.classList.add('filters')
 
 if (localStorage.getItem("token")) {
   alert ("Vous êtes déconnecté");
@@ -336,15 +345,15 @@ function createAddModal() {
     defaultOption.selected = true;
 
     const option1 = document.createElement('option');
-    option1.value = 'objets';
+    option1.value = 1;
     option1.textContent = 'Objets';
 
     const option2 = document.createElement('option');
-    option2.value = 'appartements';
+    option2.value = 2;
     option2.textContent = 'Appartements';
 
     const option3 = document.createElement('option');
-    option3.value = 'hotels-restaurants';
+    option3.value = 3;
     option3.textContent = 'Hôtels & restaurants';
 
     const addSeparator = document.createElement('div');
@@ -382,7 +391,13 @@ function createAddModal() {
         const formData = new FormData();
         formData.append('image', addPhoto.files[0]);
         formData.append('title', addTitle.value);
-        formData.append('category', addCategory.value);
+        formData.append('category', parseInt(addCategory.value, 10));
+
+        console.log(typeof parseInt(addCategory.value, 10), parseInt(addCategory.value, 10));
+
+        console.log(typeof formData.get('image'), formData.get('image'));
+        console.log(typeof formData.get('title'), formData.get('title'));
+        console.log(typeof formData.get('category'), formData.get('category'));
 
         // Call the addImage function to send the form data to the API
         addImage(formData);
@@ -509,6 +524,8 @@ async function deleteImage(imageId, imageTitle) {
 }
 
 async function addImage(formData) {
+  console.log(typeof formData, formData);
+  console.log(localStorage.getItem("token"));
   try {
     const response = await fetch('http://localhost:5678/api/works', {
       method: 'POST',
@@ -518,6 +535,8 @@ async function addImage(formData) {
         'Content-Type': 'multipart/form-data'
       }
     });
+
+    console.log(typeof response, response);
 
     if (response.ok) {
       // Handle successful response

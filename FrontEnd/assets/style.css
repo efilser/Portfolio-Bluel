@@ -507,7 +507,8 @@ input[type="file"] {
   font-size: 10px;
 }
 
-.hide {
+.hide,
+.hide-filters {
   display: none;
 }
 
