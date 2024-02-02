@@ -386,19 +386,19 @@ function createAddModal() {
         validationBtn.classList.add('success');
 
         // Create a FormData object to send the form data
-        const formData = new FormData();
-        formData.append('image', addPhoto.files[0]);
-        formData.append('title', addTitle.value);
-        formData.append('category', parseInt(addCategory.value, 10));
+        // const formData = new FormData();
+        // formData.append('image', addPhoto.files[0]);
+        // formData.append('title', addTitle.value);
+        // formData.append('category', parseInt(addCategory.value, 10));
 
-        console.log(typeof parseInt(addCategory.value, 10), parseInt(addCategory.value, 10));
+        // console.log(typeof parseInt(addCategory.value, 10), parseInt(addCategory.value, 10));
 
-        console.log(typeof formData.get('image'), formData.get('image'));
-        console.log(typeof formData.get('title'), formData.get('title'));
-        console.log(typeof formData.get('category'), formData.get('category'));
+        // console.log(typeof formData.get('image'), formData.get('image'));
+        // console.log(typeof formData.get('title'), formData.get('title'));
+        // console.log(typeof formData.get('category'), formData.get('category'));
 
         // Call the addImage function to send the form data to the API
-        addImage(formData);
+        addImage();
       }
     });
 
@@ -522,34 +522,56 @@ async function deleteImage(imageId, imageTitle) {
   }
 }
 
-async function addImage(formData) {
-  console.log(typeof formData, formData);
-  console.log(localStorage.getItem("token"));
-  try {
-    const response = await fetch('http://localhost:5678/api/works', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-        'Content-Type': 'multipart/form-data'
-      },
-      body: formData
-    });
+function addImage() {
+  const formData = new FormData();
+  const image = document.querySelector("form input[type='file']");
+  const title = document.querySelector("form input[type='text']");
+  const category = document.querySelector("form select");
 
-    console.log(typeof response, response);
+  formData.append("image", image.files[0]);
+  formData.append("title", title.value);
+  formData.append("category", category.value);
 
-    if (response.ok) {
-      // Handle successful response
-      closeAddModal();
-      createModal(); // Refresh the image grid
-    } else {
-      // Handle unsuccessful response
-      console.error('Image upload failed:', response.status);
-    }
-  } catch (error) {
-    // Handle any error that occurs during the fetch request
-    console.error('Error uploading image:', error);
-  }
+  console.log(formData);
+
+  fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("token")}`,
+    },
+    body: formData
+  })
 }
+
+// async function addImage(formData) {
+//   console.log(typeof formData, formData);
+//   console.log(localStorage.getItem("token"));
+//   try {
+//     const response = await fetch('http://localhost:5678/api/works', {
+//       method: 'POST',
+//       mode: 'cors',
+//       headers: {
+//         'Authorization': 'Bearer ' + localStorage.getItem("token"),
+//         'Content-Type': 'multipart/form-data'
+//       },
+//       body: formData
+//     });
+
+//     console.log(typeof response, response);
+
+//     if (response.ok) {
+//       // Handle successful response
+//       closeAddModal();
+//       createModal(); // Refresh the image grid
+//     } else {
+//       // Handle unsuccessful response
+//       console.error('Image upload failed:', response.status);
+//     }
+//   } catch (error) {
+//     // Handle any error that occurs during the fetch request
+//     console.error('Error uploading image:', error);
+//   }
+// }
 
 /**
  * Removes the "active" class from objectsFilter, apartmentsFilter and hotelsResFilter, and add it to the allFilter.
