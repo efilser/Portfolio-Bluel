@@ -498,9 +498,9 @@ async function deleteImage(imageId, imageTitle) {
       });
 
       if (response.ok) {
-        await fetchWorks(); // Reload the works
-        addWorks(works); // Update UI with the reloaded works
-        imageWrapper.remove(); // Remove the deleted image from the grid
+        await fetchWorks();
+        addWorks(works);
+        imageWrapper.remove();
       } else {
         console.error('Image deletion failed:', response.status);
       }
@@ -515,7 +515,7 @@ async function deleteImage(imageId, imageTitle) {
  *
  *
  */
-function addImage() {
+async function addImage() {
   const formData = new FormData();
   const image = document.querySelector("form input[type='file']");
   const title = document.querySelector(".add-title");
@@ -527,13 +527,24 @@ function addImage() {
 
   console.log(formData);
 
-  fetch("http://localhost:5678/api/works", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${localStorage.getItem("token")}`,
-    },
-    body: formData
-  })
+  try {
+    fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: formData
+    })
+
+    if (response.ok) {
+      await fetchWorks();
+      addWorks(works);
+    } else {
+      console.error('Add work failed:', response.status);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
 /**
