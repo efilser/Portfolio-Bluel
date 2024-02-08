@@ -528,7 +528,7 @@ async function addImage() {
   console.log(formData);
 
   try {
-    fetch("http://localhost:5678/api/works", {
+    let response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
